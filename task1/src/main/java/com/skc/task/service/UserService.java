@@ -48,4 +48,8 @@ public class UserService {
         }
         return "No such user found.";
     }
+
+    public String test1(){
+        return "checked";
+    }
 }

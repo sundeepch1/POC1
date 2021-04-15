@@ -1,87 +1,128 @@
 package com.skc.task.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skc.task.model.User;
 import com.skc.task.repository.UserRepository;
 import com.skc.task.service.UserService;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
 class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     private UserService userService;
 
-    @MockBean
-    private UserRepository userRepository;
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
     @Test
-    void saveUser() {
+    public void getAllTest(){
+        List<User> users = userRepository.findAll();
+
+        System.out.println("Size >>>> " + users.size());
+    }
+
+    @Test
+    void saveUser() throws Exception {
+        User user = new User();
+        user.setFirstName("Sundeep");
+        user.setSurName("Chaurasiya");
+        user.setEmailAccount("sundeep.kumar@gmail.com");
+        user.setPhoneNumber("9088776655");
+        user.setDateOfBirth("1990-09-03");
+        user.setJoiningDate("2021-04-01");
+        user.setPinCode(110096);
+        user.setLastCompanyName("Wheebox");
+        user.setCurrentCompanyPackage(32.45F);
+        user.setCurrentCompanyName("NeoSoft");
+        user.setCurrentCompanyPackage(50.45F);
+        user.setRelevantExperience(3.4F);
+        user.setTotalExperience(3.4F);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String str = objectMapper.writeValueAsString(user);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/saveUser")
+                .content(str)
+                .accept(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
 
     }
 
     @Test
     void getUserByNameSurnamePinCode() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("http://localhost:9090/getUserByDOBJoiningDateOnSort");
-       // requestBuilder.
-        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
-              //  .andExpect(MockMvcResultMatchers.content().json());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "Sundeep");
+        jsonObject.put("surName", "Chaurasiya");
+        jsonObject.put("pinCode", 110096);
+        String str = jsonObject.toString();
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/getUserByDOBJoiningDateOnSort")
+                .content(str)
+                .accept(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
     void getUserByDOBJoiningDateOnSort() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("http://localhost:9090/getUserByDOBJoiningDateOnSort");
+        List<User> users = new ArrayList<>();
+        Mockito.when(userService.getUserByDOBJoiningDateOnSort()).thenReturn(users);
+        System.out.println("Users >>>> "+users);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/getUserByDOBJoiningDateOnSort");
         MvcResult result =  mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-        //  .andExpect(MockMvcResultMatchers.content().json());
-        System.out.println("My result " + result.getResponse().getContentAsString());
+        result.getResponse().getContentAsString();
     }
 
     @Test
     void hardDeleteUser() throws Exception {
-        //when(userService.hardDeleteUser(3L, true)).thenReturn("User is deleted successfully.");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/hardDelete/{userId}",3);
+        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("User is deleted successfully."))
+                .andExpect(MockMvcResultMatchers.content().string("No such user found."));
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("http://localhost:9090/hardDelete/{userId}",3);
-        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
-                //.andExpect(MockMvcResultMatchers.content().string("User is deleted successfully."));
-                //.andExpect(MockMvcResultMatchers.content().string("No such user found."));
-                // "User is deleted successfully.";
-
-        List<User> users = this.userRepository.findAll();
-        System.out.println("My Result >>>>  " + users.size());
     }
 
     @Test
     void softDeleteUser() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("http://localhost:9090/softDelete/{userId}",4);
-        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/softDelete/{userId}",3);
+        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("User is deleted successfully."))
+                .andExpect(MockMvcResultMatchers.content().string("No such user found."));
     }
 
     @Test
-    void test1() {
+    void test1() throws Exception {
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/test");
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        System.out.println("My test result >>> " + result.getResponse().getContentAsString());
     }
 }

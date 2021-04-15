@@ -66,6 +66,7 @@ public class UserController {
 
     @GetMapping("/test")
     public String test(){
-        return "Checked.";
+        String test = userService.test1();
+        return test ;
     }
 }
