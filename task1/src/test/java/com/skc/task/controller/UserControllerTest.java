@@ -1,10 +1,12 @@
 package com.skc.task.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skc.task.model.User;
 import com.skc.task.repository.UserRepository;
 import com.skc.task.service.UserService;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,12 @@ class UserControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Test
     public void getAllTest(){
         List<User> users = userRepository.findAll();
-
         System.out.println("Size >>>> " + users.size());
     }
 
@@ -62,15 +66,19 @@ class UserControllerTest {
         user.setRelevantExperience(3.4F);
         user.setTotalExperience(3.4F);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        User user1 = new User();
+
+        Mockito.when(userService.saveUser(user1)).thenReturn(user1);
+
         String str = objectMapper.writeValueAsString(user);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/saveUser")
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/saveUser").contentType(MediaType.APPLICATION_JSON)
                 .content(str)
                 .accept(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
+        MvcResult result = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
-        System.out.println(result.getResponse().getContentAsString());
-
+        //System.out.println(result.getResponse().getContentAsString());
+        user = objectMapper.readValue(result.getResponse().getContentAsString(), User.class);
+        Assertions.assertEquals(user1,user);
     }
 
     @Test
@@ -80,39 +88,62 @@ class UserControllerTest {
         jsonObject.put("surName", "Chaurasiya");
         jsonObject.put("pinCode", 110096);
         String str = jsonObject.toString();
+
+        List<User> users1 = new ArrayList<>();
+
+        Mockito.when(userService.getUserByNameSurnamePinCode("Sundeep", "Chaurasiya", 110096)).thenReturn(users1);
+
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/getUserByDOBJoiningDateOnSort")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(str)
                 .accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        System.out.println(result.getResponse().getContentAsString());
+
+        List<User> users = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<User>>() {});
+
+        Assertions.assertEquals(users, users1);
     }
 
     @Test
     void getUserByDOBJoiningDateOnSort() throws Exception {
         List<User> users = new ArrayList<>();
         Mockito.when(userService.getUserByDOBJoiningDateOnSort()).thenReturn(users);
-        System.out.println("Users >>>> "+users);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/getUserByDOBJoiningDateOnSort");
         MvcResult result =  mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-        result.getResponse().getContentAsString();
+
+        List<User> users1 = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<User>>() {});
+
+        Assertions.assertEquals(users, users1);
+
     }
 
     @Test
     void hardDeleteUser() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/hardDelete/{userId}",3);
-        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User is deleted successfully."))
-                .andExpect(MockMvcResultMatchers.content().string("No such user found."));
 
+        String result = "";
+
+        Mockito.when(userService.hardDeleteUser(3L, true)).thenReturn(result);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/hardDelete/{userId}",3);
+        MvcResult result1 = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        String str = result1.getResponse().getContentAsString();
+        Assertions.assertEquals(str, result);
     }
 
     @Test
     void softDeleteUser() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/softDelete/{userId}",3);
-        mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("User is deleted successfully."))
-                .andExpect(MockMvcResultMatchers.content().string("No such user found."));
+        String result = "";
+
+        Mockito.when(userService.hardDeleteUser(5L, false)).thenReturn(result);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/hardDelete/{userId}",3);
+        MvcResult result1 = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        String str = result1.getResponse().getContentAsString();
+        Assertions.assertEquals(str, result);
     }
 
     @Test
