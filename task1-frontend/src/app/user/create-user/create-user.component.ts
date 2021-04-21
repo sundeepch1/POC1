@@ -21,6 +21,10 @@ export class CreateUserComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params =>{
       this.userId = +params['userId'];
+      //console.log(Number.isNaN(this.userId) + '  aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      if(Number.isNaN(this.userId)){
+        this.userId = 0;
+      }
     });
 
     if(!Number.isNaN(this.userId) && this.userId != 0){
