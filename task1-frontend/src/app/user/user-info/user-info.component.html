@@ -1,0 +1,124 @@
+<div class="card cust-border-color mt-3">
+    <div class="card-header cust-background-color cust-text-color cust-header-padding cust-header-font-size">
+      <span class="ml-3">All User Details</span>
+    </div>
+    <div *ngIf="!userList" class="card-body">
+        <div class="text-center">
+            <div class="spinner-border m-5" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+    </div>
+    <div *ngIf="userList" class="card-body">
+        <div class="col-md-12 mb-3">
+          <button type="button" class="btn cust-background-color cust-border-color cust-text-color"
+          (click)="getUserByDOBJoiningDateOnSort()">Sort User By Date Of Birth And Joining Date</button>
+        </div>
+        <div class="col-md-12">
+          <p>
+            <a class="btn cust-background-color cust-border-color cust-text-color" data-toggle="collapse" href="#getUserByNameSurnamePinCode" role="button" aria-expanded="false" aria-controls="collapseExample">
+              Search User By FisrtName SurName PinCode
+            </a>
+          </p>
+          <div class="collapse mb-3" id="getUserByNameSurnamePinCode">
+            <div class="card card-body">
+              <form [formGroup]="searchUserForm" (validSubmit)="searchUser()">
+                <div class="form-group row">
+                    <label class="label-control col-md-3">First Name</label>
+                    <input class="form-control col-md-8" type="text" id="firstName" name="firstName" formControlName="firstName"
+                        required>
+                        <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+                </div>
+                <div class="form-group row">
+                    <label class="label-control col-md-3">SurName</label>
+                    <input class="form-control col-md-8" type="text" id="surName" name="surName" formControlName="surName" required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+                </div>
+                
+                <div class="form-group row">
+                    <label class="label-control col-md-3">Pin Code</label>
+                    <input class="form-control col-md-8" type="number" id="pinCode" name="pinCode" formControlName="pinCode"
+                        required>
+                        <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn cust-background-color cust-border-color cust-text-color"
+                    (ngSubmit)="searchUser()">Search</button>
+                </div>
+            </form>
+            </div>
+          </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <th scope="row">First Name</th>
+                <th scope="row">SurName</th>
+                <th scope="row">Email</th>
+                <th scope="row">Date Of Birth</th>
+                <th scope="row">Phone Number</th>
+                <th scope="row">Status</th>
+                <th scope="row">Action</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of userList;">
+                <td>{{user.firstName}}</td>
+                <td>{{user.surName}}</td>
+                <td>{{user.emailAccount}}</td>
+                <td>{{user.dateOfBirth | date}}</td>
+                <td>{{user.phoneNumber}}</td>
+                <td (click)="enableDisableUser('enableDisableUserModal', user)" tooltip="Do you want to {{user.status?'Disabled':'Enabled'}}?"><a>{{user.status?'Enabled':'Disabled'}}</a></td>
+                <td style="cursor: pointer;" (click)="deleteUserById('userModal', user)" placement="bottom">
+                    <button class="btn cust-background-color" tooltip="Delete user">
+                        <span class="fa fa-trash cust-font-awesome-color"></span>
+                    </button>
+                    <button tooltip="Update user" class="btn cust-background-color ml-2" (click)="updateUser(user)">
+                      <span class="fa fa-edit cust-font-awesome-color"></span>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="userList==null || userList.length==0">
+                <td class="text-center" style="color: red;" colspan="7">No Records Found.</td>
+              </tr>
+            </tbody>
+          </table> 
+    </div>
+</div>
+<div class="modal fade" id="enableDisableUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                Do you want to {{user?.status?'Disable':'Enable'}} the user {{user?.firstName}}?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+          <button type="button" class="btn cust-background-color cust-text-color" (click)="enableDisableUserConfirm('enableDisableUserModal')">{{user?.status?'Disable':'Enable'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                Do you want to delete the {{user?.firstName}}?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+          <button type="button" class="btn cust-background-color cust-text-color" (click)="deleteUserByIdConfirm('userModal')">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>

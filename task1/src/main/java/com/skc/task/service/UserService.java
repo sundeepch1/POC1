@@ -49,6 +49,21 @@ public class UserService {
         return "No such user found.";
     }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
+
+    public User getUserById(Long userId){
+        Optional<User> user = this.userRepository.findById(userId);
+        User user1 = null;
+        if(user.isPresent()){
+            user1 = (User)user.get();
+        }else {
+            return null;
+        }
+        return user1;
+    }
+
     public String test1(){
         return "checked";
     }

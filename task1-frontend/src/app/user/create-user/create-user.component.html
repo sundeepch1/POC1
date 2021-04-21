@@ -1,0 +1,99 @@
+<div class="card cust-border-color mt-3">
+    <div
+        class="card-header cust-background-color cust-text-color cust-header-padding cust-header-font-size">
+        <span class="ml-3">{{userId!=0?'Create User Profile':'Update User Profile'}}</span>
+
+        <a class="pull-right mr-3" [routerLink]="['/home']">To go user dashboard</a>
+    </div>
+    <!-- <div *ngIf="userId != 0" class="card-body">
+        <div class="text-center">
+            <div class="spinner-border m-5" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div> -->
+    <div class="card-body">
+        <form [formGroup]="userForm" (validSubmit)="saveUser()">
+            <div class="form-group row">
+                <label class="label-control col-md-3">First Name</label>
+                <input class="form-control col-md-8" type="text" id="firstName" name="firstName" formControlName="firstName"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">SurName</label>
+                <input class="form-control col-md-8" type="text" id="surName" name="surName" formControlName="surName" required>
+                <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Email Account</label>
+                <input class="form-control col-md-8" type="text" id="emailAccount" name="emailAccount" formControlName="emailAccount" required>
+                <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Date Of Birth</label>
+                <input class="form-control col-md-8" data-date-format="YYYY-MM-DD" type="text" [bsConfig]="{adaptivePosition: true, dateInputFormat: 'YYYY-MM-DD' }" bsDatepicker id="dateOfBirth" name="dateOfBirth" formControlName="dateOfBirth"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Phone Number</label>
+                <input class="form-control col-md-8" type="number" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Joining Date</label>
+                <input class="form-control col-md-8" type="text" [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" bsDatepicker id="joiningDate" name="joiningDate" formControlName="joiningDate"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Pin Code</label>
+                <input class="form-control col-md-8" type="number" id="pinCode" name="pinCode" formControlName="pinCode"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Last Company Package</label>
+                <input class="form-control col-md-8" type="number" id="lastCompanyPackage" name="lastCompanyPackage" formControlName="lastCompanyPackage"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Last Company Name</label>
+                <input class="form-control col-md-8" type="text" id="lastCompanyName" name="lastCompanyName" formControlName="lastCompanyName"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Current Company Package</label>
+                <input class="form-control col-md-8" type="number" id="currentCompanyPackage" name="currentCompanyPackage" formControlName="currentCompanyPackage"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Current Company Name</label>
+                <input class="form-control col-md-8" type="text" id="currentCompanyName" name="currentCompanyName" formControlName="currentCompanyName"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Relevant Experience</label>
+                <input class="form-control col-md-8" type="number" id="relevantExperience" name="relevantExperience" formControlName="relevantExperience"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group row">
+                <label class="label-control col-md-3">Total Experience</label>
+                <input class="form-control col-md-8" type="number" id="totalExperience" name="totalExperience" formControlName="totalExperience"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn cust-background-color cust-border-color cust-text-color"
+                (ngSubmit)="saveUser()">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

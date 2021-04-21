@@ -2,6 +2,7 @@ package com.skc.task.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skc.task.domain.Response;
 import com.skc.task.model.User;
 import com.skc.task.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -29,6 +31,8 @@ public class UserController {
         return new ResponseEntity<User>(savedUser, HttpStatus.CREATED);
     }
 
+
+
     @PostMapping("/getUserByNameSurnamePinCode")
     public ResponseEntity<List<User>> getUserByNameSurnamePinCode(@RequestBody String data){
         List<User> users = new ArrayList<>();
@@ -37,7 +41,7 @@ public class UserController {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Map<String, Object> jsonMap = objectMapper.readValue(data,
                         new TypeReference<Map<String,Object>>(){});
-                users = userService.getUserByNameSurnamePinCode(jsonMap.get("name").toString(), jsonMap.get("surName").toString(), (Integer) jsonMap.get("pinCode"));
+                users = userService.getUserByNameSurnamePinCode(jsonMap.get("firstName").toString(), jsonMap.get("surName").toString(), (Integer) jsonMap.get("pinCode"));
                 return new ResponseEntity<List<User>>(users, HttpStatus.OK);
             }catch (Exception e){
 
@@ -53,15 +57,28 @@ public class UserController {
     }
 
     @DeleteMapping("/hardDelete/{userId}")
-    public ResponseEntity<String> hardDeleteUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<Response> hardDeleteUser(@PathVariable("userId") Long userId){
         String status = userService.hardDeleteUser(userId, true);
-        return new ResponseEntity<String>(status, HttpStatus.OK);
+        return new ResponseEntity<Response>(new Response(status.toString()), HttpStatus.OK);
     }
 
     @DeleteMapping("/softDelete/{userId}")
-    public ResponseEntity<String> softDeleteUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<Response> softDeleteUser(@PathVariable("userId") Long userId){
         String status = userService.hardDeleteUser(userId, false);
-        return new ResponseEntity<String>(status, HttpStatus.OK);
+        return new ResponseEntity<Response>(new Response(status.toString()), HttpStatus.OK);
+    }
+
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> users = userService.getAllUsers();
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserById/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId){
+        User user = this.userService.getUserById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/test")
