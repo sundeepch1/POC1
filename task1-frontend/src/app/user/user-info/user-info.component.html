@@ -68,12 +68,15 @@
                 <td>{{user.phoneNumber}}</td>
                 <td (click)="enableDisableUser('enableDisableUserModal', user)" tooltip="Do you want to {{user.status?'Disabled':'Enabled'}}?"><a>{{user.status?'Enabled':'Disabled'}}</a></td>
                 <td style="cursor: pointer;" (click)="deleteUserById('userModal', user)" placement="bottom">
-                    <button class="btn cust-background-color" tooltip="Delete user">
+                    <button class="btn cust-background-color" tooltip="Delete User">
                         <span class="fa fa-trash cust-font-awesome-color"></span>
                     </button>
-                    <button tooltip="Update user" class="btn cust-background-color ml-2" (click)="updateUser(user)">
+                    <button tooltip="Update User" class="btn cust-background-color ml-2" (click)="updateUser(user)">
                       <span class="fa fa-edit cust-font-awesome-color"></span>
                   </button>
+                  <button tooltip="View User Details" class="btn cust-background-color ml-2" (click)="viewUser(user)">
+                    <span class="fa fa-eye cust-font-awesome-color"></span>
+                </button>
                 </td>
               </tr>
               <tr *ngIf="userList==null || userList.length==0">

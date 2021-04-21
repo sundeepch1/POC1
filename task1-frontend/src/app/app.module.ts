@@ -14,13 +14,15 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
 import {UserService} from './user/user.service';
 import { CreateUserComponent } from './user/create-user/create-user.component';
+import { ViewUserComponent } from './user/view-user/view-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     UserInfoComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    ViewUserComponent
   ],
   imports: [
     BrowserModule,

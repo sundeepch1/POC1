@@ -89,6 +89,11 @@ export class UserInfoComponent implements OnInit {
     this.router.navigate(['/updateUser', this.user.id]);
   }
 
+  viewUser(user:any){
+    this.user= user;
+    this.router.navigate(['/viewUser', this.user.id]);
+  }
+
   getUserByDOBJoiningDateOnSort(){
     this.userList = undefined;
     this.userService.getUserByDOBJoiningDateOnSort().subscribe(response => {

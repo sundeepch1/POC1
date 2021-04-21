@@ -1,0 +1,71 @@
+<div class="card cust-border-color mt-3">
+    <div class="card-header text-center cust-background-color cust-text-color cust-header-padding cust-header-font-size">
+        User Details
+    </div>
+    <div *ngIf="!userInfo" class="card-body">
+        <div class="text-center">
+            <div class="spinner-border m-5" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+    </div>
+    <div *ngIf="userInfo" class="card-body">
+        <table class="table table-striped">
+            <tbody>
+              <tr>
+                <th scope="row">First Name</th>
+                <td>:-&nbsp;{{userInfo.firstName}}</td>
+              </tr>
+              <tr>
+                <th scope="row">SurName</th>
+                <td>:-&nbsp;{{userInfo.surName}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Email Account</th>
+                <td>:-&nbsp;{{userInfo.emailAccount}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Date Of Birth</th>
+                <td>:-&nbsp;{{userInfo.dateOfBirth | date}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Phone Number</th>
+                <td>:-&nbsp;{{userInfo.phoneNumber}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Joining Date</th>
+                <td>:-&nbsp;{{userInfo.joiningDate}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Pin Code</th>
+                <td>:-&nbsp;{{userInfo.pinCode}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Last Company Package</th>
+                <td>:-&nbsp;{{userInfo.lastCompanyPackage}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Last Company Name</th>
+                <td>:-&nbsp;{{userInfo.lastCompanyName}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Current Company Package</th>
+                <td>:-&nbsp;{{userInfo.currentCompanyPackage}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Current Company Name</th>
+                <td>:-&nbsp;{{userInfo.currentCompanyName}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Relevant Experience</th>
+                <td>:-&nbsp;{{userInfo.relevantExperience}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Total Experience</th>
+                <td>:-&nbsp;{{userInfo.totalExperience}}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+</div>
