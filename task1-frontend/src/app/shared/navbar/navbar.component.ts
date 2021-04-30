@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { AuthServiceService } from '../../auth/auth-service.service';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { CommonService } from '../../common/common.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +11,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  @Input() currentUserStatus:boolean = false;
+  constructor(private router: Router, private authService: AuthServiceService, private commonService: CommonService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    
+
+    // this.router.events.subscribe((event: Event) => {
+
+
+    //   if (event instanceof NavigationEnd) {
+
+    //     this.commonService.isLoggedIn().subscribe(result =>{
+    //       this.currentUserStatus = result;
+    //       console.log('55555555555555555', result);
+    //     });
+    //   }
+    // });
   }
 
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

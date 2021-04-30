@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { ToastrService } from 'ngx-toastr'; 
 
@@ -11,13 +11,17 @@ import { ToastrService } from 'ngx-toastr';
 export class ViewUserComponent implements OnInit {
   userId : number =0;
   userInfo: any;
-  constructor(private route: ActivatedRoute, private userService: UserService, private  toastrService: ToastrService) { }
+  constructor(private router:Router ,private route: ActivatedRoute, private userService: UserService, private  toastrService: ToastrService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params =>{
       this.userId = +params['userId'];
     });
     this.getUserById(this.userId);
+  }
+
+  updateUser(){
+    this.router.navigate(['updateUser', this.userId]);
   }
 
   getUserById(userId:number){

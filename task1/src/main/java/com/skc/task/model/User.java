@@ -1,9 +1,9 @@
 package com.skc.task.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -30,7 +30,7 @@ public class User {
     @Column(name="date_of_birth")
     private String dateOfBirth;
     @NotEmpty(message="Email account is required.")
-    @Column(name="email_account")
+    @Column(name="email_account", unique=true)
     @Email(message = "This is invalid email account.")
     private String emailAccount;
     @NotEmpty(message = "Phone number is required.")
@@ -44,6 +44,8 @@ public class User {
     @NotNull(message = "Pin code is required.")
     @Column(name="pin_code")
     private int pinCode;
+
+    @Getter
     private boolean status;
     @NotNull(message = "Last company package is required.")
     @Column(name="last_company_package")
@@ -63,4 +65,9 @@ public class User {
     @NotNull(message = "Total experience is required.")
     @Column(name="total_experience")
     private float totalExperience;
+
+    private String role;
+    @Getter(onMethod = @__( @JsonIgnore))
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 }

@@ -21,7 +21,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public User getUserByEmail(String name) {
+        return userRepository.findByEmailAccountIgnoreCase(name);
+    }
+
     public User saveUser(User user){
+        long id = user.getId();
+        if(id != 0){
+            Optional<User> saUser= userRepository.findById(id);
+            User actualUser = saUser.get();
+            user.setPassword(actualUser.getPassword());
+        }
         return userRepository.save(user);
     }
 

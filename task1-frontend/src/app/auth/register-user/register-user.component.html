@@ -1,13 +1,7 @@
 <div class="card cust-border-color mt-3">
     <div
         class="card-header cust-background-color cust-text-color cust-header-padding cust-header-font-size">
-        <span class="ml-3">{{userId!=0?'Update User Profile':'Create User Profile'}}</span>
-        <span *ngIf="userRole">
-            <a class="pull-right mr-3" style="color: white;" [routerLink]="['/home']">To go user dashboard</a>
-        </span>
-        <span *ngIf="!userRole">
-            <a class="pull-right mr-3" style="color: white;" (click)="viewProfile()">Go to profile</a>
-        </span>
+        <span class="ml-3">Register Yourself</span>
     </div>
     <!-- <div *ngIf="userId != 0" class="card-body">
         <div class="text-center">
@@ -94,9 +88,15 @@
                     required>
                     <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
             </div>
-            <div class="form-group row">
-                <label class="label-control col-md-3">Total Experience</label>
+            <!-- <div class="form-group row">
+                <label class="label-control col-md-3">Role</label>
                 <input class="form-control col-md-8" type="text" id="role" name="role" formControlName="role"
+                    required>
+                    <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
+            </div> -->
+            <div class="form-group row">
+                <label class="label-control col-md-3">Password</label>
+                <input class="form-control col-md-8" type="password" id="password" name="password" formControlName="password"
                     required>
                     <bfv-messages class="col-md-9 offset-md-3"></bfv-messages>
             </div>

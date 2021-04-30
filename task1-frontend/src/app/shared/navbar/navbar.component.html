@@ -7,15 +7,20 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <a class="navbar-brand cust-text-color" >User Management System</a>
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
+        <li class="nav-item active" *ngxPermissionsOnly="['ADMIN']">
           <a class="nav-link cust-text-color" [routerLink]="['/home']">All User</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngxPermissionsOnly="['ADMIN']">
           <a class="nav-link cust-text-color" [routerLink]="['/createUser']">Create User</a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link cust-text-color" href="#">Manage Book</a>
         </li> -->
       </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <a class="nav-link cust-text-color" [routerLink]="['/signup']" *ngIf="!currentUserStatus">Sign Up</a>
+        <a class="nav-link cust-text-color" [routerLink]="['/login']" *ngIf="!currentUserStatus">Login</a>
+        <a class="nav-link text-white cust-pointer" (click)="logout()" *ngIf="currentUserStatus">Logout</a>
+      </form>
     </div>
   </nav>

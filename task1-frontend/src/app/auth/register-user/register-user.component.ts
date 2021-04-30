@@ -1,45 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserService } from '../user.service';
+import { AuthServiceService } from '../auth-service.service';
 import * as moment from 'moment';
-import { CommonService } from 'src/app/common/common.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css']
+  selector: 'app-register-user',
+  templateUrl: './register-user.component.html',
+  styleUrls: ['./register-user.component.css']
 })
-export class CreateUserComponent implements OnInit {
+export class RegisterUserComponent implements OnInit {
 
-  public userId: number = 0;
   public userForm: any;
-  public userInfo: any;
-  public userRole: boolean = false;
-  constructor(private commonService: CommonService, private toastrService: ToastrService,
-              private userService: UserService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private toastrService: ToastrService, private authServiceService:AuthServiceService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params =>{
-      this.userId = +params['userId'];
-      //console.log(Number.isNaN(this.userId) + '  aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-      if(Number.isNaN(this.userId)){
-        this.userId = 0;
-      }
-    });
-
-    let userRole1 = this.commonService.getCurrentUserRole();
-    if(userRole1 == 'USER'){
-      this.userRole = true;
-    }else {
-      this.userRole = false;
-    }
-
-    if(!Number.isNaN(this.userId) && this.userId != 0){
-      this.getUserById(this.userId);
-    }
-
+    
     this.userForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required
@@ -81,26 +57,10 @@ export class CreateUserComponent implements OnInit {
       totalExperience: new FormControl('', [
         Validators.required
       ]),
-      role: new FormControl('',[
-        Validators.required
-      ])
+      password: new FormControl('',
+      [Validators.required])
     });
 
-  }
-
-  getUserById(userId:number){
-
-      this.userService.getUserById(userId).subscribe((user: any) =>{
-        this.setUserForm(user)
-        this.userInfo = user;
-        //this.userRole = user.role;
-      }, error => {
-        this.toastrService.error('Try later');
-      })
-  }
-
-  viewProfile(){
-    this.router.navigate(['viewUser', this.userId]);
   }
 
   setUserForm(user:any){
@@ -122,16 +82,13 @@ export class CreateUserComponent implements OnInit {
 
   saveUser(){
     let userData = this.userForm.getRawValue();
-    if(!Number.isNaN(this.userId) && this.userId != 0){
-      userData['id'] = this.userInfo.id;
-    }
     let myMoment = moment(userData['dateOfBirth']).format('YYYY-MM-DD');
     userData['dateOfBirth'] = myMoment;
     myMoment = moment(userData['joiningDate']).format('YYYY-MM-DD');
     userData['joiningDate'] = myMoment;
     //userData['createdDate']= this.userInfo.createdDate;
     //userData['enabled'] = this.userInfo.enabled;
-    this.userService.saveUser(userData).subscribe(response =>{
+    this.authServiceService.saveUser(userData).subscribe(response =>{
       this.userForm.reset();
         this.toastrService.success(response.firstName + 'is created successfully.');
         //this.router.navigate(['/home'])

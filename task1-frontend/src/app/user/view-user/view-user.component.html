@@ -1,6 +1,7 @@
 <div class="card cust-border-color mt-3">
-    <div class="card-header text-center cust-background-color cust-text-color cust-header-padding cust-header-font-size">
+    <div class=" pl-3 pr-3 card-header cust-background-color cust-text-color cust-header-padding cust-header-font-size">
         User Details
+        <a class="pull-right mr-3" style="color: white;" (click)="updateUser()">Update Profile</a>
     </div>
     <div *ngIf="!userInfo" class="card-body">
         <div class="text-center">
@@ -63,6 +64,10 @@
               <tr>
                 <th scope="row">Total Experience</th>
                 <td>:-&nbsp;{{userInfo.totalExperience}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Total Experience</th>
+                <td>:-&nbsp;{{userInfo.role}}</td>
               </tr>
             </tbody>
           </table>

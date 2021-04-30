@@ -10,30 +10,31 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   getAllUsers(): Observable <any>{
-    return this.http.get('http://localhost:9090/api/allUsers');
+    //const headers = new HttpHeaders({'Access-Control-Allow-Origin':'*'});
+    return this.http.get('/api/allUsers');//, {headers: headers});
   }
 
   getUserByDOBJoiningDateOnSort(): Observable <any>{
-    return this.http.get('http://localhost:9090/api/getUserByDOBJoiningDateOnSort');
+    return this.http.get('/api/getUserByDOBJoiningDateOnSort');
   }
   
   deleteUserById(userId:any): Observable <any>{
-    return this.http.delete('http://localhost:9090/api/hardDelete/' + userId)
+    return this.http.delete('/api/hardDelete/' + userId)
   }
 
   enableDisableUserConfirm(userId:any): Observable <any>{
-    return this.http.delete('http://localhost:9090/api/softDelete/' + userId)
+    return this.http.delete('/api/softDelete/' + userId)
   }
 
   getUserById(userId:number):Observable<any>{
-    return this.http.get('http://localhost:9090/api/getUserById/'+userId);
+    return this.http.get('/api/getUserById/'+userId);
   }
 
   saveUser(user: any):Observable<any>{
-    return this.http.post('http://localhost:9090/api/saveUser', user);
+    return this.http.post('/api/saveUser', user);
   }
 
   getUserByNameSurnamePinCode(serachUser: any):Observable<any>{
-    return this.http.post('http://localhost:9090/api/getUserByNameSurnamePinCode', serachUser);
+    return this.http.post('/api/getUserByNameSurnamePinCode', serachUser);
   }
 }
