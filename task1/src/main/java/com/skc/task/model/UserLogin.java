@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UserLogin {
 
-    @NotNull(message = "Email account is required.")
+    //@NotNull(message = "Email account is required.")
     private String emailAccount;
-    @NotNull(message = "Password is required.")
+    //@NotNull(message = "Password is required.")
     private String password;
 }
